@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 from app.users.auth import  get_password_hash, autentificate_user, create_acces_token
 from app.users.dao import UsersDAO
-from app.users.dependencies import get_curent_admin_user, get_current_user
+from app.users.dependencies import get_current_admin_user, get_current_user
 from app.users.models import Users
 from app.exceptions import IncorrectEmailOrPassword, UserAlreadyExistException
 
@@ -32,6 +32,7 @@ async def login_user(response: Response, user_data: SUserAuth):
     response.set_cookie("booking_access_token", access_token, httponly=True)
     return {"access_token": access_token}
 
+
 @router.post("/logout")
 async def  logout_user(response: Response):
     response.delete_cookie("booking_access_token")
@@ -41,6 +42,7 @@ async def  logout_user(response: Response):
 async def read_current_user(current_user: Users = Depends(get_current_user)):
     return current_user
 
+
 @router.get("/all-users")
-async def read_current_user(current_user: Users = Depends(get_curent_admin_user)):
+async def read_current_user(current_user: Users = Depends(get_current_admin_user)):
     return await UsersDAO.find_all()
