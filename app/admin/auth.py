@@ -36,5 +36,4 @@ class AdminAuth(AuthenticationBackend):
         
         # Check the token in depth
 
-
 authentication_backend = AdminAuth(secret_key="...")

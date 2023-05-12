@@ -5,12 +5,24 @@ from fastapi_cache.decorator import cache
 from app.hotels.dao import HotelDAO
 from app.hotels.rooms.schemas import SRooms
 
-from app.hotels.schemas import SHotels
+from app.hotels.schemas import SHotels, SHotelsRoomsLeft
 
 router = APIRouter(
     prefix="/hotels",
     tags=["hotels"]
 )
+
+
+@router.get("/all")
+@cache(expire=60)
+async def get_all_hotels() -> list[SHotels]:
+    return await HotelDAO.select_all_filter()
+
+
+@router.get("/id")
+@cache(expire=60)
+async def get_hotel_by_id(hotel_id: str) -> SHotels:
+    return await HotelDAO.find_one_or_none(id=int(hotel_id))
 
 
 @router.get("/{location}")
@@ -23,13 +35,3 @@ async def get_hotels_by_location_and_date(
     hotels = await HotelDAO.search_for_hotels(location, date_from, date_to)
     hotels_json = parse_obj_as(list[SHotels], hotels)
     return hotels_json
-
-@router.get("/{hotel_id}/rooms")
-async def get_rooms_by_time(
-    hotel_id: int,
-    date_from: date = Query(..., description=f"Date format is: {datetime.now().date()}"),
-    date_to: date = Query(..., description=f"Date format is: {datetime.now().date()}"),
-) -> list[SRooms]:
-    rooms = await HotelDAO.search_for_rooms(hotel_id, date_from, date_to)
-
-    return rooms

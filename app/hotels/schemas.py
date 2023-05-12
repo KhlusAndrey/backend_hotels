@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Json
+from pydantic import BaseModel
 
 
 class SHotels(BaseModel):
@@ -8,7 +8,6 @@ class SHotels(BaseModel):
     services: list[str]
     room_quantity: int
     image_id: int
-    rooms_left: int
 
     class Config:
         orm_mode = True

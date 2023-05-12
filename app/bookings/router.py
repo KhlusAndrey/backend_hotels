@@ -1,5 +1,5 @@
-from datetime import date
-from fastapi import APIRouter, Depends
+from datetime import date, datetime
+from fastapi import APIRouter, Depends, Query, Response
 
 
 from app.bookings.dao import BookingDAO
@@ -24,21 +24,20 @@ async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking
 
 @router.post("")
 async def add_booking(
-    room_id: int, date_from: date, date_to: date,
+    room_id: int,
+    date_from: date = Query(..., description=f"Date format is: {datetime.now().date()}"),
+    date_to: date = Query(..., description=f"Date format is: {datetime.now().date()}"), 
     user: Users = Depends(get_current_user)
 ):
     booking = await BookingDAO.add_booking(user.id, room_id, date_from, date_to)
-    # send_email_booking_confirmation.delay(booking, user.email) # For send need tune email
+    # send_email_booking_confirmation.delay(booking, user.email)           # Celery task, for sending emails you should tune email settings in .env
     if not booking:
         raise RoomCanNotBeBookedException
 
 
-# @router.delete("/{id}")
-# async def all_bookings(
-#     booking_id = id,
-#     user: Users = Depends(get_current_user)
-# ):
-#     get_booking = await BookingDAO.find_one_or_none(booking_id)
-#     if not get_booking:
-#         raise BookingsNotExistException
-#     await BookingDAO.delete_booking(get_booking)
+@router.delete("/{booking_id}")
+async def delete_booking(response: Response,
+    booking_id: int,
+    user: Users = Depends(get_current_user)) -> None:
+    await BookingDAO.delete_booking_for_user(booking_id=int(booking_id), user_id=user.id)
+    response.status_code = 204

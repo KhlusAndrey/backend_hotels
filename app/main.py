@@ -20,6 +20,7 @@ from app.bookings.router import router as router_bookings
 from app.users.models import Users
 from app.users.router import router as router_user
 from app.hotels.router import router as router_hotels
+from app.hotels.rooms.router import router as router_rooms
 from app.images.router import router as router_images
 from app.pages.router import router as router_pages
 
@@ -44,6 +45,7 @@ app.include_router(router_user)
 app.include_router(router_bookings)
 # app.include_router(router_auth)
 app.include_router(router_hotels)
+app.include_router(router_rooms)
 app.include_router(router_images)
 app.include_router(router_pages)
 
@@ -62,13 +64,11 @@ app.add_middleware(
 )
 
 
-
 admin = Admin(app, engine, authentication_backend=authentication_backend)
 admin.add_view(UsersAdmin)
 admin.add_view(BookingsAdmin)
 admin.add_view(HotelsAdmin)
 admin.add_view(RoomsAdmin)
-
 
 
 @app.on_event("startup")

@@ -1,11 +1,15 @@
 
-from datetime import date
+from datetime import date, datetime, timedelta
 from app.bookings.models import Bookings
 from app.dao.base import BaseDAO
 from sqlalchemy import delete, select, insert, func, and_, or_
-from app.bookings.schemas import SBookings
+from sqlalchemy.exc import SQLAlchemyError
+from app.bookings.schemas import SBookingWithRoomInfo, SBookings
+from app.exceptions import BookingsNotExistException, DurationBookingException, RoomCanNotBeBookedException
+from app.helpers.helpers import validation_bookings_dates
 from app.hotels.rooms.models import Rooms
 from app.database import engine, async_session_maker
+from app.users.models import Users
 
 class BookingDAO(BaseDAO):
     model = Bookings
@@ -18,6 +22,10 @@ class BookingDAO(BaseDAO):
         date_from: date,
         date_to: date, 
     ):
+        """ Add booking for current user"""
+
+        validation_bookings_dates(date_from, date_to)
+        
         """
         WITH booked_rooms AS (
         SELECT * FROM bookings
@@ -58,7 +66,7 @@ class BookingDAO(BaseDAO):
                 Rooms.quantity, booked_rooms.c.room_id
             )
 
-            print(get_rooms_left.compile(engine, compile_kwargs={"literal_binds": True}))
+            # print(get_rooms_left.compile(engine, compile_kwargs={"literal_binds": True})) # Show raw SQL query
             rooms_left = await session.execute(get_rooms_left)
             rooms_left: int = rooms_left.scalar()
 
@@ -79,39 +87,91 @@ class BookingDAO(BaseDAO):
                 return new_booking.scalar()
             else:
                 return None
+    
+    
+    @classmethod
+    async def get_booked_rooms(cls, room_id: int, date_from: date, date_to: date) -> int:
+        """Get available rooms by room_id for period date_from - date_to """
         
-    # @classmethod
-    # async def booking_delete(cls, booking_id):
-    #     async with async_session_maker() as session:
-    #         await session.delete(booking_id)
-    #         await session.commit()
-            """
-        Пример эндпоинта: /bookings.
-        HTTP метод: GET.
-        HTTP код ответа: 200.
-        Описание: возвращает список всех бронирований пользователя.
-        Нужно быть авторизованным: да.
-        Параметры: отсутствуют.
+        validation_bookings_dates(date_from, date_to)
         
-        Ответ пользователю: для каждого бронирования должно быть указано: 
-        room_id, 
-        user_id, 
-        date_from, 
-        date_to, price, 
-        total_cost, 
-        total_days, 
-        image_id(для номера), 
-        name(для номера), 
-        description, 
-        services(для номера).
-id = Column(Integer, primary_key=True)
-room_id = Column(ForeignKey("rooms.id"))
-user_id = Column(ForeignKey("users.id") )
-date_from = Column(Date, nullable=False)
-date_to = Column(Date, nullable=False)
-price = Column(Integer, nullable=False)
-total_cost = Column(Integer, Computed("(date_to - date_from) * price"))
-total_days = Column(Integer, Computed("date_to - date_from"))
+        return await cls.select_all_filter(
+            and_(
+                Bookings.room_id == room_id,
+                and_(Bookings.date_to >= date_from, Bookings.date_from <= date_to),
+            )
+        )    
+    
+    @classmethod
+    async def get_booking_for_user(cls, user: Users) -> list[SBookingWithRoomInfo]:
+        """Get all bookings for current user"""
+        async with async_session_maker() as session:
+            query = (
+                select(
+                    Bookings.id,
+                    Bookings.room_id,
+                    Bookings.user_id,
+                    Bookings.date_from,
+                    Bookings.date_to,
+                    Bookings.price,
+                    Bookings.total_cost,
+                    Bookings.total_days,
+                    Rooms.image_id,
+                    Rooms.name,
+                    Rooms.description,
+                    Rooms.services,
+                )
+                .select_from(Bookings)
+                .join(Rooms, Bookings.room_id == Rooms.id, isouter=True)
+                .where(Bookings.user_id == user.id)
+            )
 
-        """
-            
+            result = await session.execute(query)
+            return result.all()
+
+    @classmethod
+    async def add_booking_for_user(cls, user_id: int, room_id: int,
+        date_from: date, date_to: date) -> SBookings:
+        """ Add booking for current user"""
+        try:
+            # Cheek duration of booking? no more than 30 days.
+            if date_from + timedelta(days=30) < date_to:
+                raise DurationBookingException
+            # Cheek correct booking dates
+            validation_bookings_dates(date_from, date_to)
+            booked_rooms: int = len(await cls.get_booked_rooms(room_id, date_from, date_to))
+            async with async_session_maker() as session:
+                total_rooms: int = (await session.execute(
+                    select(Rooms.quantity).filter_by(id=room_id))).scalar()
+                # If not available rooms for booking
+                if not total_rooms - booked_rooms:
+                    raise RoomCanNotBeBookedException
+                # Get price for room per night
+                price: int = (await session.execute(
+                    select(Rooms.price).filter_by(id=room_id))).scalar()
+                # Add booking
+                return (await cls.add_rows(room_id=room_id,user_id=user_id,
+                    date_from=date_from,date_to=date_to,price=price)).scalar()
+        # Add logging
+        except (SQLAlchemyError, Exception) as err:
+            if isinstance(err, SQLAlchemyError):
+                msg: str = "DB"
+            elif isinstance(err, Exception):
+                msg: str = "Unknown"
+            msg += "Exception: Cannot add booking"
+            extra = {
+                "user_id": user_id,
+                "room_id": room_id, 
+                "date_from": date_from, 
+                "date_to": date_to,
+            }
+        #     logger.error(msg, extra=extra, exc_info=True)
+
+    @classmethod
+    async def delete_booking_for_user(cls, booking_id: int, user_id: int) -> None:
+        """ Delete booking for current user by booking_id"""
+        # Cheek booking is exist
+        if not await cls.find_one_or_none(id=booking_id, user_id=user_id):
+            raise BookingsNotExistException
+        # Delete booking
+        await cls.delete_rows_filer_by(id=booking_id, user_id=user_id)
