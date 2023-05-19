@@ -1,6 +1,7 @@
-from app.database import Base
-from sqlalchemy import Column, Computed, Date, ForeignKey, Integer, String, JSON
+from sqlalchemy import Column, Computed, Date, ForeignKey, Integer
 from sqlalchemy.orm import relationship
+
+from app.database import Base
 
 
 class Bookings(Base):
@@ -8,7 +9,7 @@ class Bookings(Base):
 
     id = Column(Integer, primary_key=True)
     room_id = Column(ForeignKey("rooms.id"))
-    user_id = Column(ForeignKey("users.id") )
+    user_id = Column(ForeignKey("users.id"))
     date_from = Column(Date, nullable=False)
     date_to = Column(Date, nullable=False)
     price = Column(Integer, nullable=False)

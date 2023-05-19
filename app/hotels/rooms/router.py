@@ -6,7 +6,6 @@ from fastapi_cache.decorator import cache
 from app.hotels.rooms.dao import RoomsDAO
 from app.hotels.rooms.schemas import SRoomsRoomLeft
 
-
 router = APIRouter(
     prefix="/hotels", 
     tags=["Rooms"]

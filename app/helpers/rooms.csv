@@ -1,0 +1,22 @@
+hotel_id,name,description,price,services,quantity,image_id
+1,Standard Room,"Comfortable room with a view of the city.",100,["Wi-Fi"; "TV"; "Air Conditioning"],10,12345
+1,Deluxe Room,"Spacious room with a king-size bed and modern amenities.",150,["Wi-Fi"; "TV"; "Mini Bar"],25,23456
+2,Deluxe Room,"Spacious room with a king-size bed and modern amenities.",150,["Wi-Fi"; "TV"; "Mini Bar"],10,23456
+2,Suite,"Luxurious suite with a separate living area and private balcony.",250,["Wi-Fi"; "TV"; "Jacuzzi"],15,34567
+3,Suite,"Luxurious suite with a separate living area and private balcony.",250,["Wi-Fi"; "TV"; "Jacuzzi"],40,34567
+4,Standard Room,"Cozy room with a comfortable bed and a private bathroom.",80,["Wi-Fi"; "TV"; "Air Conditioning"],50,45678
+5,Executive Room,"Elegant room with a work desk and complimentary breakfast.",120,["Wi-Fi"; "TV"; "Room Service"],60,56789
+6,Family Suite,"Spacious suite with multiple bedrooms and a kitchenette.",200,["Wi-Fi"; "TV"; "Mini Bar"],30,67890
+7,Mountain View Room,"Scenic room with panoramic views of the mountains.",120,["Wi-Fi"; "TV"; "Air Conditioning"],20,78901
+8,Luxury Cabin,"Rustic cabin with a fireplace and stunning mountain views.",180,["Wi-Fi"; "TV"; "Hot Tub"],50,89012
+9,Penthouse Suite,"Opulent suite with a private terrace and deluxe amenities.",300,["Wi-Fi"; "TV"; "Room Service"],50,90123
+10,Standard Room,"Comfortable room just steps away from the beach.",90,["Wi-Fi"; "TV"; "Air Conditioning"],30,23456
+11,Ocean View Suite,"Spacious suite with breathtaking views of the ocean.",180,["Wi-Fi"; "TV"; "Mini Bar"],40,34567
+12,Beachfront Bungalow,"Charming bungalow with direct access to the beach.",250,["Wi-Fi"; "TV"; "Outdoor Shower"],35,45678
+13,Executive Room,"Sophisticated room with modern furnishings and city views.",150,["Wi-Fi"; "TV"; "Mini Bar"],25,56789
+14,Presidential Suite,"Luxurious suite with a private dining area and city skyline views.",400,["Wi-Fi"; "TV"; "Room Service"],50,67890
+15,Deluxe Room,"Stylish room with a comfortable seating area and city views.",200,["Wi-Fi"; "TV"; "Air Conditioning"],20,78901
+16,Grand Suite,"Grand suite with a separate living area and panoramic mountain views.",350,["Wi-Fi"; "TV"; "Hot Tub"],45,89012
+17,Cozy Room,"Warm and inviting room with a comfortable bed and cozy atmosphere.",100,["Wi-Fi"; "TV"; "Air Conditioning"],50,90123
+18,Seaside Room,"Relaxing room with partial views of the ocean and coastal decor.",120,["Wi-Fi"; "TV"; "Mini Bar"],15,10987
+18,Seaview Suite,"Elegant suite with stunning ocean views and a private balcony.",250,["Wi-Fi"; "TV"; "Room Service"],15,0987

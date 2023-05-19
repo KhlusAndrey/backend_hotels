@@ -1,0 +1,19 @@
+id,name,location,services,room_quantity,image_id
+1,Greenfield Hotel,123 Main St Miami,["Wi-Fi"; "Swimming Pool"; "Restaurant"],35,1
+2,Coastal Resort,456 Elm St Miami,["Breakfast"; "Gym"; "Spa"],25,2
+3,Mountain View Lodge,789 Mountain Rd Miami,["Hiking Trails"; "Skiing"; "Fitness Center"],40,3
+4,Beachside Inn,321 Ocean Ave,["Beach Access"; "Bar"; "Room Service"],50,45783
+5,City Center Hotel,567 Downtown Blvd,["Concierge"; "Business Center"; "Restaurant"],60,65847
+6,Grand Hotel,123 Main St,["Wi-Fi"; "Swimming Pool"; "Restaurant"],30,12345
+7,Cozy Inn,456 Elm St,["Breakfast"; "Gym"; "Spa"],20,67890
+8,Seaside Resort,789 Ocean Ave,["Beach Access"; "Bar"; "Room Service"],50,24680
+9,Seaview Resort,789 Ocean Blvd,["Beach Access"; "Swimming Pool"; "Restaurant"],50,23456
+10,Luxury Suites,987 High Street,["Spa"; "Fitness Center"; "Room Service"],30,56789
+11,Urban Retreat,543 City Avenue,["Concierge"; "Business Center"; "Bar"],40,89012
+12,Mountain Lodge,321 Summit Road,["Hiking Trails"; "Skiing"; "Breakfast"],35,43210
+13,Riverside Inn,876 River Street,["Fishing"; "Canoeing"; "Outdoor Activities"],25,67890
+14,Harbor View Hotel,654 Bay Drive,["Waterfront Dining"; "Swimming Pool"; "Fitness Center"],50,98765
+15,Charming Inn,210 Main Street,["Fireplace"; "Garden"; "Wi-Fi"],20,54321
+16,Countryside Resort,987 Country Lane,["Tennis Courts"; "Spa"; "Restaurant"],45,10987
+17,Modern Oasis,123 Downtown Avenue,["Rooftop Bar"; "Gym"; "Room Service"],50,87654
+18,Tranquil Retreat,456 Serene Road,["Pool"; "Yoga Classes"; "Breakfast"],30,90123

@@ -1,14 +1,15 @@
 from datetime import datetime
+
 from app.bookings.dao import BookingDAO
 
 
 async def test_create_and_get_new_booking():
     new_booking = await BookingDAO.add_booking(
-        user_id = 2,
-        room_id = 2,
-        date_from = datetime.strptime("2023-07-10", "%Y-%m-%d").date(),
-        date_to = datetime.strptime("2023-07-14", "%Y-%m-%d").date(),
-)
+        user_id=2,
+        room_id=2,
+        date_from=datetime.strptime("2023-07-10", "%Y-%m-%d").date(),
+        date_to=datetime.strptime("2023-07-14", "%Y-%m-%d").date(),
+    )
     assert new_booking.user_id == 2
     assert new_booking.room_id == 2
 

@@ -1,9 +1,11 @@
 from typing import Literal
+
 from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
     MODE: Literal["DEV", "PROD", "TEST"]
+    LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
     
     DB_HOST: str
     DB_PORT: int

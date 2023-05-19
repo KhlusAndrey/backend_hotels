@@ -1,15 +1,16 @@
 from datetime import date, datetime
-from pydantic import parse_obj_as
-from fastapi import APIRouter, Depends, Query
+
+from fastapi import APIRouter, Query
 from fastapi_cache.decorator import cache
+from pydantic import parse_obj_as
+
 from app.hotels.dao import HotelDAO
 from app.hotels.rooms.schemas import SRooms
-
 from app.hotels.schemas import SHotels, SHotelsRoomsLeft
 
 router = APIRouter(
     prefix="/hotels",
-    tags=["hotels"]
+    tags=["Hotels"]
 )
 
 

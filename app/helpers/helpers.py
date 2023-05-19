@@ -1,13 +1,16 @@
-
 from datetime import date, timedelta
-from app.exceptions import DatesFromBookingException, DatesToBookingException, IntervalMoreThenBookingException
 
+from app.exceptions import (
+    DatesFromBookingException,
+    DatesToBookingException,
+    IntervalMoreThenBookingException,
+)
 
 current_date = date.today()
 
 
-def validation_bookings_dates(date_from: date, date_to: date) -> None:
-    """ Validation correction booking dates input """
+async def validation_bookings_dates(date_from: date, date_to: date) -> None:
+    """Validation correction booking dates input"""
     if date_from < current_date:
         raise DatesFromBookingException
     if date_to < date_from:

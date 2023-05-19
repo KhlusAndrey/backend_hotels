@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s
+
+  external_labels:
+    monitor: 'codelab-monitor'
+
+scrape_configs:
+  - job_name: 'prometheus'
+
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'booking_app'    
+  
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['booking_app:8000']
+
+ #Container name in docker-compose booking:

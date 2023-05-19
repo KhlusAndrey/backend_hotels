@@ -1,8 +1,9 @@
 from sqladmin import ModelView
-from app.users.models import Users
+
 from app.bookings.models import Bookings
-from app.hotels.rooms.models import Rooms
 from app.hotels.models import Hotels
+from app.hotels.rooms.models import Rooms
+from app.users.models import Users
 
 
 class UsersAdmin(ModelView, model=Users):
@@ -13,6 +14,7 @@ class UsersAdmin(ModelView, model=Users):
     name = "User"
     name_plural = "Users"
     icon = "fa-solid fa-user"
+
 
 class BookingsAdmin(ModelView, model=Bookings):
     column_list = [c.name for c in Bookings.__table__.c]  # Take all columns from model

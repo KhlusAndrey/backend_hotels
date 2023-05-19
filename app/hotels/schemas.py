@@ -16,4 +16,3 @@ class SHotels(BaseModel):
 class SHotelsRoomsLeft(SHotels):
     rooms_left: int
     
-    
